@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nutzungsbedingungen & Datenschutzerklärung — Chronos</title>
+  <meta name="description" content="Nutzungsbedingungen und Datenschutzerklärung für den Discord-Bot Chronos" />
+  <style>
+    :root{
+      --maxw:1120px;
+      --bg-1:#060312;
+      --bg-2:#0b1330;
+      --muted:#aebbd0;
+      --accent-1:#7b5cff; /* lila */
+      --accent-2:#4dd0e1; /* blau-cyan */
+      --card-opaque: 0.86; /* etwas undurchsichtiger */
+      --card-gray: rgba(32,34,40,var(--card-opaque));
+      --email-bright: #dffcff; /* helle Emailfarbe */
+      --layer-ease: cubic-bezier(.2,.9,.25,1);
+      --reveal-duration:700ms;
+      --reveal-stagger:80ms;
+    }
+
+    /* base */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(900px 360px at 10% 10%, rgba(123,92,255,0.06), transparent 18%),
+        radial-gradient(900px 320px at 90% 80%, rgba(77,208,225,0.04), transparent 20%),
+        linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 100%);
+      color:#eaf6fb;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:40px 20px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    /* very soft, fully diffused ambient blobs (no edges) */
+    .ambient {
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      overflow:hidden;
+    }
+    .blob {
+      position:absolute;
+      border-radius:50%;
+      filter: blur(96px) saturate(110%);
+      opacity:0.95;
+      mix-blend-mode:screen;
+      transform: translate3d(0,0,0);
+      will-change: transform;
+    }
+    .blob.b1{
+      width:1100px; height:1100px;
+      left:-24%; top:-28%;
+      background: radial-gradient(circle at 30% 30%, rgba(123,92,255,0.16), rgba(123,92,255,0.06) 40%, transparent 70%);
+      animation: float1 20s ease-in-out infinite;
+    }
+    .blob.b2{
+      width:900px; height:900px;
+      right:-16%; top:8%;
+      background: radial-gradient(circle at 60% 40%, rgba(77,208,225,0.14), rgba(77,208,225,0.06) 40%, transparent 70%);
+      animation: float2 22s ease-in-out infinite;
+    }
+    .blob.b3{
+      width:640px; height:640px;
+      left:6%; bottom:-20%;
+      background: radial-gradient(circle at 40% 50%, rgba(96,72,255,0.10), rgba(96,72,255,0.04) 40%, transparent 70%);
+      animation: float3 18s ease-in-out infinite;
+    }
+
+    @keyframes float1 {
+      0%{ transform: translate3d(0,-18px,0) scale(1); }
+      50%{ transform: translate3d(22px,32px,0) scale(1.03); }
+      100%{ transform: translate3d(0,-18px,0) scale(1); }
+    }
+    @keyframes float2 {
+      0%{ transform: translate3d(0,0,0) scale(1); }
+      50%{ transform: translate3d(-22px,-28px,0) scale(1.03); }
+      100%{ transform: translate3d(0,0,0) scale(1); }
+    }
+    @keyframes float3 {
+      0%{ transform: translate3d(0,8px,0) scale(1); }
+      50%{ transform: translate3d(-14px,18px,0) scale(1.02); }
+      100%{ transform: translate3d(0,8px,0) scale(1); }
+    }
+
+    .shell{
+      position:relative;
+      width:100%;
+      max-width:var(--maxw);
+      z-index:2;
+      border-radius:20px;
+      padding:28px;
+      /* grauer, etwas undurchsichtiger Hintergrund für den "Kasten" */
+      background: linear-gradient(180deg, rgba(28,30,36, var(--card-opaque)), rgba(26,28,34, calc(var(--card-opaque) - 0.02)));
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow:
+        0 24px 70px rgba(2,6,23,0.6),
+        0 8px 36px rgba(123,92,255,0.04);
+      overflow:visible;
+      backdrop-filter: blur(10px) saturate(1.06);
+      transform-style:preserve-3d;
+      perspective:1200px;
+    }
+
+    /* subtle progress bar */
+    .progress {
+      position:absolute;
+      left:0; right:0; top:0;
+      height:4px;
+      background:linear-gradient(90deg,var(--accent-1), var(--accent-2));
+      transform-origin:left;
+      transform:scaleX(0);
+      border-radius:0 0 6px 6px;
+      z-index:6;
+      transition: transform 120ms linear;
+    }
+
+    header{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      margin-bottom:22px;
+      /* ensure header content stays above other layers */
+      position:relative;
+      z-index:3;
+    }
+
+    .logo {
+      width:96px;
+      height:96px;
+      border-radius:18px;
+      overflow:hidden;
+      background:linear-gradient(135deg,#0f0720,#042737);
+      flex:0 0 96px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 12px 36px rgba(2,4,12,0.6), 0 8px 40px rgba(123,92,255,0.04);
+      border: 1px solid rgba(255,255,255,0.03);
+      transform-origin:center;
+      transition: transform 600ms var(--layer-ease), box-shadow 400ms var(--layer-ease);
+      transform-style:preserve-3d;
+    }
+    .logo img{ width:84px; height:84px; object-fit:cover; display:block; filter: drop-shadow(0 12px 26px rgba(0,0,0,0.6)); }
+
+    /* ensure title is flexible and won't be overlapped */
+    .title {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      transform-style:preserve-3d;
+      flex: 1 1 auto;      /* allow title to shrink/grow */
+      min-width: 0;        /* enable truncation/wrapping inside flex */
+      position:relative;
+      z-index:3;           /* keep above background blobs */
+    }
+    .title h1{
+      margin:0;
+      font-size:22px;
+      color:#f1fbff;
+      letter-spacing:0.2px;
+      text-shadow: 0 6px 28px rgba(123,92,255,0.03);
+      line-height:1.05;
+      word-break:break-word; /* allow wrapping, avoid overflow */
+    }
+    .title p{ margin:0; color:var(--muted); font-size:13px; }
+
+    nav{
+      margin-left:auto;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      transform-style:preserve-3d;
+      flex: 0 0 auto; /* prevent nav from shrinking title */
+      z-index:3;
+    }
+    .btn {
+      background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.008));
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.03);
+      padding:8px 12px;
+      border-radius:10px;
+      font-size:13px;
+      cursor:pointer;
+      transition: all 220ms var(--layer-ease);
+      backdrop-filter: blur(4px);
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-4px); color:#fff; border-color: rgba(255,255,255,0.06); }
+
+    .btn.primary{
+      background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+      color:#02131a;
+      font-weight:700;
+      border:0;
+      box-shadow: 0 14px 42px rgba(123,92,255,0.06);
+    }
+
+    main{
+      display:grid;
+      grid-template-columns: 1fr 380px;
+      gap:28px;
+      align-items:start;
+      transform-style:preserve-3d;
+    }
+
+    .card {
+      position:relative;
+      background: rgba(28,30,36, var(--card-opaque) );
+      border-radius:14px;
+      padding:22px;
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 10px 36px rgba(1,8,15,0.45);
+      overflow:visible;
+      transform-style:preserve-3d;
+      backdrop-filter: blur(6px);
+    }
+
+    .card h2{ margin-top:0; color:#e8fbff; font-size:18px; }
+    .muted{ color:var(--muted); font-size:14px; }
+
+    .section + .section{ margin-top:18px; }
+
+    ul{ color:var(--muted); margin:8px 0 12px 20px; }
+    li{ margin:6px 0; line-height:1.45; }
+
+    footer{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+    footer .small{ color:var(--muted); font-size:13px; }
+
+    /* reveal layers: stacked smooth reveal */
+    .reveal {
+      opacity:0;
+      transform: translateY(28px) translateZ(-40px) scale(0.995) rotateX(4deg);
+      filter: blur(6px) saturate(0.98);
+      transition:
+        opacity var(--reveal-duration) var(--layer-ease),
+        transform var(--reveal-duration) var(--layer-ease),
+        filter var(--reveal-duration) var(--layer-ease),
+        box-shadow 360ms var(--layer-ease);
+      will-change: transform, opacity, filter;
+      transform-origin: center;
+    }
+
+    .reveal.in-view {
+      opacity:1;
+      transform: translateY(0) translateZ(0) scale(1) rotateX(0deg);
+      filter: blur(0) saturate(1);
+      box-shadow: 0 18px 48px rgba(2,6,23,0.45);
+    }
+
+    .reveal { transition-delay: calc(var(--i,0) * var(--reveal-stagger)); }
+
+    .heading-accent{
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(123,92,255,0.12), rgba(77,208,225,0.06));
+      color: #dffaff;
+      font-weight:700;
+      font-size:13px;
+    }
+
+    /* brighter email link styling (lighter, more contrast) - non-overlapping */
+    .anchor {
+      color: var(--accent-2);
+      text-decoration: none;
+      transition: color 180ms ease, text-shadow 200ms ease;
+    }
+    .anchor-email {
+      color: var(--email-bright);
+      font-weight:700;
+      display:inline-block;            /* ensure it takes its own layout space */
+      position:relative;               /* no absolute layering */
+      z-index:4;                       /* above card but below header */
+      background: linear-gradient(90deg, rgba(223,252,255,0.06), rgba(77,208,225,0.04));
+      padding:8px 12px;
+      border-radius:10px;
+      border: 1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 8px 24px rgba(77,208,225,0.04);
+      line-height:1;
+      margin-top:6px;                  /* spacing so it won't touch other text */
+      word-break:keep-all;
+    }
+    .anchor-email:hover{ text-decoration:underline; color:#ffffff; }
+
+    /* contact-cta block: ensure it never overlaps and pushes content */
+    .contact-cta{
+      display:inline-block;            /* behaves like a normal inline content box */
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      background: linear-gradient(90deg, rgba(123,92,255,0.06), rgba(77,208,225,0.03));
+      border-radius:12px;
+      border:1px solid rgba(123,92,255,0.06);
+      margin-top:8px;                  /* ensure vertical spacing */
+      z-index:4;                       /* relative stacking */
+      position:relative;
+    }
+
+    .notice{
+      background:linear-gradient(90deg, rgba(123,92,255,0.06), rgba(77,208,225,0.02));
+      padding:10px 12px;
+      border-radius:10px;
+      color:var(--muted);
+      border:1px solid rgba(123,92,255,0.04);
+    }
+
+    /* keyboard focus */
+    :root.show-focus .btn:focus, :root.show-focus a:focus { outline: 3px solid rgba(77,208,225,0.16); outline-offset:4px; border-radius:10px; }
+
+    /* responsiveness */
+    @media (max-width:960px){
+      main{ grid-template-columns: 1fr; }
+      .logo{ width:72px; height:72px; flex:0 0 72px; border-radius:12px; }
+      .logo img{ width:64px; height:64px; }
+      .title h1{ font-size:18px; }
+      .anchor-email{ padding:7px 10px; font-size:14px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- very soft, non-kantige blobs in the background -->
+  <div class="ambient" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <div class="shell" role="main" aria-labelledby="page-title">
+    <div class="progress" id="progress" aria-hidden="true"></div>
+
+    <header>
+      <!-- Save the attached logo image as "logo.png" in the same folder as this HTML file -->
+      <div class="logo tilt" id="logo" aria-hidden="false">
+        <img src="logo.png" alt="Chronos Logo">
+      </div>
+
+      <div class="title">
+        <h1 id="page-title">Chronos — Nutzungsbedingungen & Datenschutzerklärung</h1>
+        <p class="muted">Zuletzt aktualisiert: 14. Dezember 2025 — Verantwortlich: Cookie_GAMEMASTER</p>
+      </div>
+
+      <nav>
+        <button class="btn" onclick="document.getElementById('tos').scrollIntoView({behavior:'smooth'})">ToS</button>
+        <button class="btn" onclick="document.getElementById('privacy').scrollIntoView({behavior:'smooth'})">Datenschutz</button>
+        <a class="btn primary" href="#contact" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Kontakt</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="card reveal" aria-labelledby="tos" id="tos" style="--i:0">
+        <h2><span class="heading-accent">ToS</span> — Nutzungsbedingungen</h2>
+
+        <div class="section" style="--i:1">
+          <h3 class="muted">Verantwortlicher</h3>
+          <p><strong>Cookie_GAMEMASTER</strong><br>
+          Kontakt: <a class="anchor anchor-email" href="mailto:cookiegamemaster59@gmail.com">cookiegamemaster59@gmail.com</a></p>
+        </div>
+
+        <div class="section" style="--i:2">
+          <h3 class="muted">Zweck des Bots</h3>
+          <p>Chronos bietet Funktionen wie Level‑System, Moderation, eine Economy (z. B. <code>/rob</code>) sowie AFK‑Funktionen (z. B. <code>/afk Grund:....</code>). Nutzung erfolgt freiwillig durch Hinzufügen des Bots oder Ausführen von Befehlen.</p>
+        </div>
+
+        <div class="section" style="--i:3">
+          <h3 class="muted">Erlaubte Nutzung</h3>
+          <ul>
+            <li>Nur im Einklang mit den Discord‑Nutzungsbedingungen und Community‑Richtlinien.</li>
+            <li>Keine Nutzung für Spam, Belästigung, illegale Inhalte oder sonstige Verstöße.</li>
+            <li>Server‑Admins überwachen die Bot‑Nutzung auf ihren Servern.</li>
+          </ul>
+        </div>
+
+        <div class="section" style="--i:4">
+          <h3 class="muted">Verknüpfte Rollen (Linked Roles)</h3>
+          <p>Chronos kann Application Role Connections nutzen, um Rollen automatisch zuzuweisen. Dafür verarbeitet der Bot Role‑Connection‑Metadaten, die du per OAuth freigibst — ausschließlich zum Zweck der Rollenzuweisung.</p>
+        </div>
+
+        <div class="section" style="--i:5">
+          <h3 class="muted">Haftungsausschluss</h3>
+          <p>Keine Gewähr für ständige Verfügbarkeit oder Fehlerfreiheit. Betreiber haftet nicht für Schäden durch missbräuchliche Nutzung oder von Nutzern verbreitete Inhalte, soweit gesetzlich zulässig.</p>
+        </div>
+
+        <div class="section" style="--i:6">
+          <h3 class="muted">Änderungen</h3>
+          <p>Diese Bedingungen können angepasst werden. Wesentliche Änderungen werden über den Bot oder zugehörige Informationskanäle bekanntgegeben.</p>
+        </div>
+      </section>
+
+      <aside class="card reveal" aria-labelledby="privacy" id="privacy" style="--i:1">
+        <h2><span class="heading-accent">Datenschutz</span> — Datenschutzerklärung</h2>
+
+        <p class="muted" style="--i:2">Kurzfassung: Es werden nur die technisch notwendigen Daten verarbeitet; keine Weitergabe zu Werbezwecken.</p>
+
+        <div class="section" style="--i:3">
+          <h3 class="muted">Verantwortlicher</h3>
+          <p><strong>Cookie_GAMEMASTER</strong><br>
+          Kontakt: <a class="anchor anchor-email" href="mailto:cookiegamemaster59@gmail.com">cookiegamemaster59@gmail.com</a></p>
+        </div>
+
+        <div class="section" style="--i:4">
+          <h3 class="muted">Welche Daten?</h3>
+          <ul>
+            <li>Discord‑Benutzer‑IDs, Server‑IDs, Kanal‑IDs</li>
+            <li>Nachrichten/Slash‑Commands an den Bot</li>
+            <li>Spiel‑Daten: Level, XP, virtuelle Währung, Cooldowns, AFK‑Status</li>
+            <li>Role‑Connection‑Metadaten bei Nutzung verknüpfter Rollen (OAuth)</li>
+          </ul>
+        </div>
+
+        <div class="section" style="--i:5">
+          <h3 class="muted">Zwecke</h3>
+          <ul>
+            <li>Bereitstellung der Bot‑Funktionen (Level, Economy, Moderation, AFK)</li>
+            <li>Verwaltung verknüpfter Rollen (Vergabe/Entzug)</li>
+            <li>Keine externe Nutzung für Werbung/Tracking/Profiling</li>
+          </ul>
+        </div>
+
+        <div class="section" style="--i:6">
+          <h3 class="muted">Speicherung</h3>
+          <p>Spiel‑Daten werden in einer Datenbank gespeichert, technische Logs nur so lange wie nötig. Löschung oder Anonymisierung erfolgt nach Bedarf.</p>
+        </div>
+
+        <div class="section" style="--i:7">
+          <h3 class="muted">Weitergabe</h3>
+          <p>Keine Verkäufe oder Weitergabe zu Werbezwecken. Verarbeitung innerhalb der notwendigen Infrastruktur (Hosting, DB-Provider) und im Einklang mit Discord‑Richtlinien.</p>
+        </div>
+
+        <div class="section" style="--i:8">
+          <h3 class="muted">Rechtsgrundlage & Rechte</h3>
+          <p>Nutzung erfolgt freiwillig (OAuth) — Verarbeitung zur Erfüllung der Funktionen und berechtigten Interessen. Nutzerrechte (Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch) können per Kontakt ausgeübt werden.</p>
+        </div>
+
+        <div class="section" style="--i:9">
+          <div class="notice">
+            Tipp: Diese Seite kann als <strong>Privacy Policy URL</strong> (und optional Terms of Service URL) im Discord Developer‑Portal eingetragen werden.
+          </div>
+        </div>
+      </aside>
+
+      <div style="grid-column:1 / -1">
+        <div class="card reveal" id="contact" aria-labelledby="contact-title" style="--i:10; margin-top:18px">
+          <h3 id="contact-title">Kontakt & Datenlöschung</h3>
+          <p class="muted">Anfragen zu Auskunft, Berichtigung oder Löschung richten Sie bitte an:</p>
+
+          <!-- contact-cta is now inline-block and will not overlap surrounding content -->
+          <p class="contact-cta" style="margin-top:8px">
+            <a class="anchor anchor-email" href="mailto:cookiegamemaster59@gmail.com">cookiegamemaster59@gmail.com</a>
+          </p>
+
+          <p class="muted" style="margin-top:12px">Nutzer können die Nutzung jederzeit beenden, indem sie den Bot vom Server entfernen. Auf Anfrage werden Spiel‑Daten (z. B. Level/Economy) zu einem Discord‑Konto gelöscht.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="small">© 2025 Chronos — Cookie_GAMEMASTER</div>
+    </footer>
+  </div>
+
+  <script>
+    // Accessibility: focus outlines only when using keyboard
+    (function(){
+      function handleFirstTab(e){
+        if(e.key === 'Tab'){
+          document.documentElement.classList.add('show-focus');
+          window.removeEventListener('keydown', handleFirstTab);
+        }
+      }
+      window.addEventListener('keydown', handleFirstTab);
+    })();
+
+    // subtle parallax for blobs + logo tilt
+    (function(){
+      const blobs = document.querySelectorAll('.blob');
+      const logo = document.getElementById('logo');
+      const shell = document.querySelector('.shell');
+
+      function onScroll(){
+        const y = window.scrollY || window.pageYOffset;
+        blobs.forEach((b, i) => {
+          const speed = [0.03, 0.06, 0.05][i] || 0.05;
+          b.style.transform = `translate3d(0,${-120 + y * speed}px,0)`;
+        });
+      }
+      window.addEventListener('scroll', onScroll, {passive:true});
+      onScroll();
+
+      // gentle logo tilt on pointer move within shell
+      shell.addEventListener('pointermove', function(e){
+        const rect = shell.getBoundingClientRect();
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top + rect.height/2;
+        const rx = (e.clientX - cx) / rect.width;
+        const ry = (e.clientY - cy) / rect.height;
+        const rotY = rx * 4.5;
+        const rotX = -ry * 4.5;
+        const translateY = Math.max(-6, Math.min(6, -ry*6));
+        logo.style.transform = `translateZ(20px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(${translateY}px)`;
+      });
+      shell.addEventListener('pointerleave', () => logo.style.transform = '');
+
+    })();
+
+    // IntersectionObserver: reveal elements smoothly (stacked)
+    (function(){
+      const reveals = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            entry.target.classList.add('in-view');
+          }
+        });
+      }, {
+        root: null,
+        threshold: 0.08,
+        rootMargin: '0px 0px -10% 0px'
+      });
+      reveals.forEach((el, i) => {
+        if(!el.style.getPropertyValue('--i')) el.style.setProperty('--i', i);
+        io.observe(el);
+      });
+    })();
+
+    // scroll progress bar
+    (function(){
+      const prog = document.getElementById('progress');
+      function update(){
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docH > 0 ? (window.scrollY / docH) : 0;
+        prog.style.transform = `scaleX(${Math.min(1, Math.max(0, pct))})`;
+      }
+      window.addEventListener('scroll', update, {passive:true});
+      window.addEventListener('resize', update);
+      update();
+    })();
+  </script>
+</body>
+</html>
