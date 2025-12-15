@@ -298,7 +298,14 @@
     }
     .anchor-email:hover{ text-decoration:underline; color:#ffffff; }
 
-    /* contact-cta block: ensure it never overlaps and pushes content */
+    .notice{
+      background:linear-gradient(90deg, rgba(123,92,255,0.06), rgba(77,208,225,0.02));
+      padding:10px 12px;
+      border-radius:10px;
+      color:var(--muted);
+      border:1px solid rgba(123,92,255,0.04);
+    }
+
     .contact-cta{
       display:inline-block;            /* behaves like a normal inline content box */
       gap:10px;
@@ -312,14 +319,6 @@
       position:relative;
     }
 
-    .notice{
-      background:linear-gradient(90deg, rgba(123,92,255,0.06), rgba(77,208,225,0.02));
-      padding:10px 12px;
-      border-radius:10px;
-      color:var(--muted);
-      border:1px solid rgba(123,92,255,0.04);
-    }
-
     /* keyboard focus */
     :root.show-focus .btn:focus, :root.show-focus a:focus { outline: 3px solid rgba(77,208,225,0.16); outline-offset:4px; border-radius:10px; }
 
@@ -328,8 +327,6 @@
       main{ grid-template-columns: 1fr; }
       .logo{ width:72px; height:72px; flex:0 0 72px; border-radius:12px; }
       .logo img{ width:64px; height:64px; }
-      .title h1{ font-size:18px; }
-      .anchor-email{ padding:7px 10px; font-size:14px; }
     }
   </style>
 </head>
@@ -350,7 +347,7 @@
         <img src="logo.png" alt="Chronos Logo">
       </div>
 
-      <div class="title">
+      <div class="title" style="transform:translateZ(20px)">
         <h1 id="page-title">Chronos — Nutzungsbedingungen & Datenschutzerklärung</h1>
         <p class="muted">Zuletzt aktualisiert: 14. Dezember 2025 — Verantwortlich: Cookie_GAMEMASTER</p>
       </div>
@@ -405,15 +402,9 @@
       <aside class="card reveal" aria-labelledby="privacy" id="privacy" style="--i:1">
         <h2><span class="heading-accent">Datenschutz</span> — Datenschutzerklärung</h2>
 
-        <p class="muted" style="--i:2">Kurzfassung: Es werden nur die technisch notwendigen Daten verarbeitet; keine Weitergabe zu Werbezwecken.</p>
+        <p class="muted">Kurzfassung: Es werden nur die technisch notwendigen Daten verarbeitet; keine Weitergabe zu Werbezwecken.</p>
 
         <div class="section" style="--i:3">
-          <h3 class="muted">Verantwortlicher</h3>
-          <p><strong>Cookie_GAMEMASTER</strong><br>
-          Kontakt: <a class="anchor anchor-email" href="mailto:cookiegamemaster59@gmail.com">cookiegamemaster59@gmail.com</a></p>
-        </div>
-
-        <div class="section" style="--i:4">
           <h3 class="muted">Welche Daten?</h3>
           <ul>
             <li>Discord‑Benutzer‑IDs, Server‑IDs, Kanal‑IDs</li>
@@ -423,7 +414,7 @@
           </ul>
         </div>
 
-        <div class="section" style="--i:5">
+        <div class="section" style="--i:4">
           <h3 class="muted">Zwecke</h3>
           <ul>
             <li>Bereitstellung der Bot‑Funktionen (Level, Economy, Moderation, AFK)</li>
@@ -432,24 +423,21 @@
           </ul>
         </div>
 
-        <div class="section" style="--i:6">
+        <div class="section" style="--i:5">
           <h3 class="muted">Speicherung</h3>
           <p>Spiel‑Daten werden in einer Datenbank gespeichert, technische Logs nur so lange wie nötig. Löschung oder Anonymisierung erfolgt nach Bedarf.</p>
         </div>
 
-        <div class="section" style="--i:7">
+        <div class="section" style="--i:6">
           <h3 class="muted">Weitergabe</h3>
           <p>Keine Verkäufe oder Weitergabe zu Werbezwecken. Verarbeitung innerhalb der notwendigen Infrastruktur (Hosting, DB-Provider) und im Einklang mit Discord‑Richtlinien.</p>
         </div>
 
-        <div class="section" style="--i:8">
+        <div class="section" style="--i:7">
           <h3 class="muted">Rechtsgrundlage & Rechte</h3>
           <p>Nutzung erfolgt freiwillig (OAuth) — Verarbeitung zur Erfüllung der Funktionen und berechtigten Interessen. Nutzerrechte (Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch) können per Kontakt ausgeübt werden.</p>
-        <div class="section" style="--i:9">
-          <div class="notice">
-
-          </div>
         </div>
+
       </aside>
 
       <div style="grid-column:1 / -1">
