@@ -1,0 +1,66 @@
+:root{
+  --bg-1: #0b1020;
+  --bg-2: #0e1524;
+  --card: rgba(255,255,255,0.04);
+  --card-2: rgba(255,255,255,0.03);
+  --accent: linear-gradient(90deg,#7b61ff,#3bd1ff);
+  --glass-border: rgba(255,255,255,0.04);
+  --muted: #98a0aa;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(123,97,255,0.07), transparent 10%),
+              linear-gradient(180deg,var(--bg-1),var(--bg-2));
+  color:#e6edf3;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding-bottom:60px;
+}
+
+/* layout */
+.container{max-width:1100px;margin:0 auto;padding:28px}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;gap:18px;align-items:center}
+.logo-wrap{width:72px;height:72px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,0.02)}
+.logo{width:56px;height:56px;object-fit:contain;border-radius:8px}
+.title h1{margin:0;font-size:20px;letter-spacing:-0.2px}
+.meta{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+/* actions */
+.top-actions{display:flex;gap:10px}
+.pill{background:transparent;border:1px solid var(--glass-border);color:var(--muted);padding:8px 12px;border-radius:999px;cursor:pointer}
+.pill.primary{background:var(--accent);color:#fff;border:none;box-shadow:0 8px 24px rgba(59,209,255,0.06)}
+
+/* main grid */
+.main-grid{display:grid;grid-template-columns: 1fr 360px;gap:28px;margin-top:18px;padding:0 4px}
+.card{background:linear-gradient(180deg, rgba(17,22,30,0.65), rgba(10,12,16,0.55));border-radius:14px;padding:22px;box-shadow:0 6px 30px rgba(2,6,12,0.6);border:1px solid var(--glass-border)}
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.badge{background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:10px;font-weight:600;color:var(--muted);font-size:13px}
+.badge.alt{background:rgba(255,255,255,0.02)}
+.card h2{margin:0;font-size:18px}
+.card-content{color:#d7e2ea;line-height:1.55}
+.card-content h3{margin-top:14px;margin-bottom:8px}
+.card-content ul{margin:8px 0 10px 20px}
+
+/* privacy aside */
+.privacy{position:relative;}
+.privacy .lead{color:var(--muted);margin-bottom:10px}
+
+/* footer */
+.site-footer{margin-top:36px}
+.footer-card{background:var(--card-2);padding:22px;border-radius:12px;border:1px solid var(--glass-border);display:flex;flex-direction:column;gap:12px}
+.email-pill{display:inline-block;padding:10px 14px;border-radius:999px;background:linear-gradient(90deg,#27314a,#1d2a3a);border:1px solid rgba(255,255,255,0.04);color:#fff;text-decoration:none}
+.muted{color:var(--muted);font-size:13px}
+.copyright{margin-top:12px;color:var(--muted);font-size:13px;text-align:right}
+
+/* responsive */
+@media(max-width:960px){
+  .main-grid{grid-template-columns:1fr; padding:0}
+  .top-actions{gap:8px}
+  .title h1{font-size:18px}
+  .logo-wrap{width:56px;height:56px}
+}
